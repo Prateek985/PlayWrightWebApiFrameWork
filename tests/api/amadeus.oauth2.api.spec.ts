@@ -47,5 +47,5 @@ test('GET --get location data', async ({ request }) => {
    });
    
    expect(locationResponse.status()).toBe(200);
-   console.log(locationResponse.json());
+   
 });
