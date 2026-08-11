@@ -8,46 +8,47 @@ on:
   workflow_dispatch: # manual trigger button in github UI
 
 jobs:
-   test:
-   runs-on: ubuntu-latest
-   timeout-minutes: 15
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
 
-   steps:
-     - name: Checkout code
-       uses: actions/checkout@v4
-     
-     - name: Setup Node.js
-       uses: actions/setup-node@v4
-       with: 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with: 
           node-version: 20
 
-     - name: Install dependencies
-       run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-     - name: Install Playwright browsers
-       run: npx playwright install --with-deps chromium
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
 
-     - name: Run tests
-       run: npx playwright test --project=chromium
-       env:
-         ENV: qa
-         BASE_URL: ${{ secrets.BASE_URL }}
-         USERNAME: ${{ secrets.USERNAME }}
-         PASSWORD: ${{ secrets.PASSWORD }}
-         API_BASE_URL: ${{ secrets.API_BASE_URL }}           
-         API_Token: ${{ secrets.API_Token }}
+      - name: Run tests
+        run: npx playwright test --project=chromium
+        env:
+          ENV: qa
+          BASE_URL: ${{ secrets.BASE_URL }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}          
+          API_Token: ${{ secrets.API_Token }}
 
-     - name: Upload HTML Report
-         if: always()
-         uses: actions/upload-artifact@v4
-         with:
+      - name: Upload HTML Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
           name: playwright-html-report      
           path: reports/html-reports/
           retention-days: 30
-     - name: Upload Allure Results
-         if: always()
-         uses: actions/upload-artifact@v4
-         with:
+
+      - name: Upload Allure Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
           name: allure-results      
           path: allure-results/
-          retention-days: 30     
+          retention-days: 30
